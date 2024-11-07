@@ -1,0 +1,5 @@
+aiohttp
+fastapi
+pytz
+shapely
+uvicorn

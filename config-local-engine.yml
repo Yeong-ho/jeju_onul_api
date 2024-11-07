@@ -1,0 +1,22 @@
+vroouty:
+  path: "./out/vroouty"
+  threads: 8
+routingServers:
+  car: # default, necessary
+    url: "http://osrm-jeju:5000"
+    host: "osrm-jeju"
+    port: "5000"
+    queries:
+      generate_hints: false
+      skip_waypoints: true
+      exclude: "ferry"
+  atlan:
+    url: "http://atlan-wrapper:6000"
+    host: "atlan-wrapper"
+    port: "6000"
+    queries:
+      generate_hints: false
+      skip_waypoints: true
+      exclude: "ferry"
+
+timeAdaptiveProfiles:

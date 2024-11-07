@@ -1,0 +1,42 @@
+version: '3.1'
+
+services:
+
+  roouty-dynamic-engine:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    environment:
+      VERSION: local
+    env_file: ./.env.local-dynamic-engine
+    ports:
+      - 8002:8000
+    volumes:
+      - ./data/logs/:/data/logs/
+
+  roouty-engine:
+    image: roouty-engine.kr.ncr.ntruss.com/engine/roouty-engine:latest
+    volumes:
+      - ./config-local-engine.yml:/app/config.yml
+    environment:
+      ELASTIC_APM_ENVIRONMENT: dev
+    env_file: ./.env.local-engine
+    ports:
+      - 8001:8000
+
+  atlan-wrapper:
+    image: roouty-engine.kr.ncr.ntruss.com/engine/roouty-atlan-api-wrapper:latest
+    environment:
+      ELASTIC_APM_ENVIRONMENT: dev
+      ATLAN_API_AUTH_KEY: "1385512903241f25ec27149c8a5217ac0c8279ebee"
+    ports:
+      - 6000:6000
+
+  osrm-jeju:
+    image: ghcr.io/project-osrm/osrm-backend:v5.27.1
+    # restart: always
+    ports:
+      - 5000:5000
+    volumes:
+      - ./data/osrm/:/data/osrm/
+    command: /bin/bash -c "osrm-routed /data/osrm/jeju.osrm -p 5000 -m -a MLD --max-trip-size -1 --max-table-size -1 --max-viaroute-size -1"
